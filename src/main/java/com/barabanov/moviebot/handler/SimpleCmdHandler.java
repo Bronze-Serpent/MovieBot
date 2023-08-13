@@ -25,7 +25,7 @@ public class SimpleCmdHandler implements CmdHandler
         switch (cmd) {
             case START ->
             {
-                KeyboardButton genresBtn = new KeyboardButton(Button.GENRES.getMsgSyntax());
+                KeyboardButton genresBtn = new KeyboardButton(Button.CATEGORIES.getMsgSyntax());
                 KeyboardButton topMoviesBtn = new KeyboardButton(Button.TOP_MOVIES.getMsgSyntax());
                 KeyboardButton newFilmsBtn = new KeyboardButton(Button.NEW_FILMS.getMsgSyntax());
                 KeyboardButton rndMovieBtn = new KeyboardButton(Button.RANDOM_MOVIE.getMsgSyntax());

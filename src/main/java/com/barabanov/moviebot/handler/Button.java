@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public enum Button
 {
-    GENRES("Genres"),
+    CATEGORIES("Categories"),
     TOP_MOVIES("Top movies"),
     NEW_FILMS("New films"),
     RANDOM_MOVIE("Random movie");

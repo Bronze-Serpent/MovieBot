@@ -1,10 +1,9 @@
 package com.barabanov.moviebot.bot;
 
 
-import com.barabanov.moviebot.handler.Command;
-import com.barabanov.moviebot.handler.HomeBtnHandler;
-import com.barabanov.moviebot.handler.SimpleCmdHandler;
-import com.barabanov.moviebot.handler.TxtMsgHandler;
+import com.barabanov.moviebot.ORM.DAOFilmJDBC;
+import com.barabanov.moviebot.handler.*;
+import com.barabanov.moviebot.service.FilmService;
 import com.barabanov.moviebot.service.MsgReceiver;
 import com.barabanov.moviebot.service.MsgSender;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -40,8 +39,10 @@ public class BotStarter
         // Daemon потоки можно будет заменить обычными с interrupt(),
         // но для этого нужно будет сделать консольное приложение из проекта. Чтобы где-то вводить stop,
         // оповещать потоки о прекращении работы и они завершали своё выполнение
+        FilmService filmService = new FilmService(new DAOFilmJDBC());
+
         MsgReceiver msgReceiver = new MsgReceiver(bot, new SimpleCmdHandler(),
-                new HomeBtnHandler(), new TxtMsgHandler());
+                new HomeBtnHandler(filmService), new TxtMsgHandler(filmService), new SimpleCallBackHandler(filmService));
         Thread receiver = new Thread(msgReceiver);
         receiver.setDaemon(true);
         receiver.setName("MsgReceiver");

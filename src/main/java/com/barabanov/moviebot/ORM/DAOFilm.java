@@ -11,4 +11,8 @@ public interface DAOFilm extends DAOInterface<Film>
     List<Film> readWithTitle(String title) throws SQLException;
 
     List<Film> readWithCategory(String genreName)  throws SQLException;
+
+    List<Film> readWithYear(int year) throws SQLException;
+
+    List<Film> readFilmsWithScore(int score)  throws SQLException;
 }

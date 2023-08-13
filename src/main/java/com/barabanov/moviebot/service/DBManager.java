@@ -27,22 +27,6 @@ public class DBManager
 
         ds = new HikariDataSource(config);
     }
-    /*
-    static
-    {
-
-        config.setJdbcUrl(AppPropUtil.get(URL_KEY));
-        config.setUsername(AppPropUtil.get(USERNAME_KEY));
-        config.setPassword(AppPropUtil.get(PASSWORD_KEY));
-        config.addDataSourceProperty("cachePrepStmts", "true");
-        config.addDataSourceProperty("prepStmtCacheSize", "250");
-        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-
-        HikariConfig config = new HikariConfig(PROPERTIES);
-
-        ds = new HikariDataSource(config);
-    }
-     */
 
     public static Connection getConnection() throws SQLException {
         return ds.getConnection();

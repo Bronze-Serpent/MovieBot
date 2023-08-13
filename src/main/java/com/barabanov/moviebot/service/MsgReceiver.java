@@ -1,12 +1,8 @@
 package com.barabanov.moviebot.service;
 
 
-import com.barabanov.moviebot.handler.Button;
-import com.barabanov.moviebot.handler.ButtonHandler;
-import com.barabanov.moviebot.handler.MsgHandler;
-import com.barabanov.moviebot.handler.Command;
+import com.barabanov.moviebot.handler.*;
 import com.barabanov.moviebot.bot.TgManageMsgBot;
-import com.barabanov.moviebot.handler.CmdHandler;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -22,14 +18,16 @@ public class MsgReceiver implements Runnable
     private final CmdHandler cmdHandler;
     private final ButtonHandler btnHandler;
     private final MsgHandler msgHandler;
+    private final CallBackHandler callBackHandler;
 
 
-    public MsgReceiver(TgManageMsgBot bot, CmdHandler cmdHandler, ButtonHandler btnHandler, MsgHandler msgHandler)
+    public MsgReceiver(TgManageMsgBot bot, CmdHandler cmdHandler, ButtonHandler btnHandler, MsgHandler msgHandler, CallBackHandler callBackHandler)
     {
         this.bot = bot;
         this.cmdHandler = cmdHandler;
         this.btnHandler = btnHandler;
         this.msgHandler = msgHandler;
+        this.callBackHandler = callBackHandler;
     }
 
 
@@ -56,16 +54,9 @@ public class MsgReceiver implements Runnable
                             btnHandler.handleButton(Button.fromString(text), msg, resultKeeper);
                         msgHandler.handleMessage(msg, resultKeeper);
                     }
-                    else if (msg.isReply())
-                    {
-                        // ничего пока что
-                    }
-
                 }
                 else if (update.hasCallbackQuery())
-                {
-                    // Message Buttons Handler
-                }
+                    callBackHandler.handleCallBack(update.getCallbackQuery(), resultKeeper);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
