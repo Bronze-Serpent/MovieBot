@@ -1,105 +1,131 @@
 package com.barabanov.moviebot.service;
 
-import com.barabanov.moviebot.ORM.DAOFilm;
+import com.barabanov.moviebot.dto.FilmCreateDto;
+import com.barabanov.moviebot.dto.FilmReadDto;
 import com.barabanov.moviebot.entity.Category;
 import com.barabanov.moviebot.entity.Film;
+import com.barabanov.moviebot.mapper.FilmCreateMapper;
+import com.barabanov.moviebot.mapper.FilmReadMapper;
+import com.barabanov.moviebot.repository.FilmRepository;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.hibernate.graph.GraphSemantic;
 
-import java.sql.SQLException;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validator;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 
+@RequiredArgsConstructor
 public class FilmService
 {
+    private final Validator validator;
 
-    private final DAOFilm daoFilm;
+    private final FilmReadMapper filmReadMapper;
+    private final FilmCreateMapper filmCreateMapper;
+
+    private final FilmRepository filmRepository;
 
 
-    public FilmService(DAOFilm daoFilm)
+    @Transactional
+    public FilmReadDto getRandomMovie()
     {
-        this.daoFilm = daoFilm;
-    }
+        List<Category> categories = new LinkedList<>(List.of(Category.values()));
+        Collections.shuffle(categories);
 
-
-    public Film getRandomMovie()
-    {
-        try
+        for(Category category : categories)
         {
-            List<Category> categories = Arrays.stream(Category.values()).toList();
-            List<Film> filmsWithCat = new LinkedList<>();
-            while (filmsWithCat.size() == 0)
-                filmsWithCat = daoFilm.readWithCategory(categories.get(ThreadLocalRandom.current().nextInt(categories.size())).getWriting());
-
-            return filmsWithCat.get(ThreadLocalRandom.current().nextInt(filmsWithCat.size()));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            List<Film> filmsWithCategory = filmRepository.readWithCategory(category);
+            if (!filmsWithCategory.isEmpty())
+                return filmReadMapper.mapFrom(
+                        filmsWithCategory.get(ThreadLocalRandom.current().nextInt(filmsWithCategory.size()))
+                );
         }
+
+        return null;
     }
 
-
-    public List<Film> findMovie(String title)
+    @Transactional
+    public List<FilmReadDto> findByTitle(String title)
     {
-        try {
-            return daoFilm.readWithTitle(title.toUpperCase());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        return filmReadMapper.mapFrom(filmRepository.findByTitle(title));
     }
 
-
-    public List<Film> getBestFilms(int quantity)
+    @Transactional
+    public List<FilmReadDto> getBestFilms(int quantity)
     {
         int score = 10; // score 1 to 10
         List<Film> bestFilms = new LinkedList<>();
 
-        while(bestFilms.size() < quantity || score > 1)
+        while(bestFilms.size() < quantity || score > 0)
         {
-            try {
-                List<Film> filmsWithScore = daoFilm.readFilmsWithScore(score--);
-                fillInTheList(bestFilms, quantity, filmsWithScore);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            List<Film> filmsWithScore = filmRepository.readFilmsWithScore(score--);
+            fillInTheList(bestFilms, quantity, filmsWithScore);
         }
 
-        return bestFilms;
+        return filmReadMapper.mapFrom(bestFilms);
     }
 
-
-    public List<Film> moviesWithYear(int year)
+    @Transactional
+    public List<FilmReadDto> moviesWithYear(LocalDate year)
     {
-        try
-        {
-            return daoFilm.readWithYear(year);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        return filmReadMapper.mapFrom(filmRepository.readWithYear(year));
     }
 
-
-    public List<Film> moviesWithCategory(Category category)
+    @Transactional
+    public List<FilmReadDto> moviesWithCategory(Category category)
     {
-        try
-        {
-            return daoFilm.readWithCategory(category.getWriting());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        return filmReadMapper.mapFrom(filmRepository.readWithCategory(category));
     }
 
 
-    public static String describeFilm(Film film)
+    @Transactional
+    public Long create(FilmCreateDto filmCreateDto)
+    {
+        // Проблема при валидации Language в LanguageValidator
+        var validationResult = validator.validate(filmCreateDto);
+        if (!validationResult.isEmpty())
+            throw new ConstraintViolationException(validationResult);
+
+        Film filmEntity = filmCreateMapper.mapFrom(filmCreateDto);
+        return filmRepository.save(filmEntity).getId();
+    }
+
+    @Transactional
+    public Optional<FilmReadDto> findById(Long id)
+    {
+        Map<String, Object> properties = Map.of(
+                GraphSemantic.LOAD.getJakartaHintName(), filmRepository.createGraphWithLanguage()
+        );
+
+        return filmRepository.findById(id, properties).map(filmReadMapper::mapFrom);
+    }
+
+    @Transactional
+    public boolean delete(Long id)
+    {
+        var mayBeFilm = filmRepository.findById(id);
+        mayBeFilm.ifPresent(film -> filmRepository.delete(film.getId()));
+
+        return mayBeFilm.isPresent();
+    }
+
+
+    public static String describeFilm(FilmReadDto filmReadDto)
     {
         StringBuilder sb = new StringBuilder();
-        sb.append(film.title()).append("\n\n");
+        sb.append(filmReadDto.title()).append("\n\n");
         Calendar cal = Calendar.getInstance();
-        cal.setTime(film.releaseYear());
+        cal.setTime(Date.valueOf(filmReadDto.releaseYear()));
         sb.append("Year: ").append(cal.get(Calendar.YEAR)).append("\n");
-        sb.append("Language: ").append(film.language().getWriting()).append("\n");
-        sb.append("Length: ").append(film.length()).append("\n");
-        sb.append("Category: ").append(film.category().getWriting()).append("\n");
-        sb.append("Rating: ").append(film.rating().getWriting()).append("\n\n");
-        sb.append("Description: ").append(film.description()).append("\n");
+        sb.append("Language: ").append(filmReadDto.languageReadDto().name()).append("\n");
+        sb.append("Length: ").append(filmReadDto.length()).append("\n");
+        sb.append("Category: ").append(filmReadDto.category().getWriting()).append("\n");
+        sb.append("Rating: ").append(filmReadDto.rating().getWriting()).append("\n\n");
+        sb.append("Description: ").append(filmReadDto.description()).append("\n");
 
         return sb.toString();
     }

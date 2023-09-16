@@ -1,5 +1,7 @@
 package com.barabanov.moviebot.entity;
 
+import java.util.Arrays;
+
 public enum Rating
 {
     G("G"),
@@ -19,6 +21,13 @@ public enum Rating
     Rating(String writing)
     {
         this.writing = writing;
+    }
+
+    public static boolean isItRating(String line)
+    {
+        return Arrays.stream(Rating.values())
+                .map(Rating::getWriting)
+                .anyMatch(ratingWriting -> ratingWriting.equals(line));
     }
 
     public String getWriting() { return writing; }

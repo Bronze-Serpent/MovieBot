@@ -1,8 +1,8 @@
 package com.barabanov.moviebot.handler;
 
 
+import com.barabanov.moviebot.dto.FilmReadDto;
 import com.barabanov.moviebot.entity.Category;
-import com.barabanov.moviebot.entity.Film;
 import com.barabanov.moviebot.service.FilmService;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -33,7 +33,7 @@ public class HomeBtnHandler implements ButtonHandler
 
 
     @Override
-    public void handleButton(Button btn, Message msg, Consumer<BotApiMethodMessage> resultKeeper)
+    public void handleButton(MenuButton btn, Message msg, Consumer<BotApiMethodMessage> resultKeeper)
     {
         String chatId = String.valueOf(msg.getChatId());
 
@@ -75,7 +75,7 @@ public class HomeBtnHandler implements ButtonHandler
             int bestFilmsQuantity = 10;
 
             List<List<InlineKeyboardButton>> buttons = filmService.getBestFilms(bestFilmsQuantity).stream()
-                    .map(Film::title)
+                    .map(FilmReadDto::title)
                     .map((title) -> {
                         InlineKeyboardButton btn = new InlineKeyboardButton();
                         btn.setText(title);
@@ -107,9 +107,9 @@ public class HomeBtnHandler implements ButtonHandler
         {
             int newFilmsQuantity = 15;
 
-            List<List<InlineKeyboardButton>> buttons = filmService.moviesWithYear(LocalDate.now().getYear()).stream()
+            List<List<InlineKeyboardButton>> buttons = filmService.moviesWithYear(LocalDate.now()).stream()
                     .limit(newFilmsQuantity)
-                    .map(Film::title)
+                    .map(FilmReadDto::title)
                     .map((title) -> {
                         InlineKeyboardButton btn = new InlineKeyboardButton();
                         btn.setText(title);

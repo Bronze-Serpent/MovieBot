@@ -1,25 +1,42 @@
 package com.barabanov.moviebot.entity;
 
-public enum Language
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+@Entity
+@Data
+@NoArgsConstructor
+@ToString
+@EqualsAndHashCode
+public class Language implements BaseEntity<Integer>
 {
-    ENGLISH("English"),
-    ITALIAN("Italian"),
-    JAPANESE("Japanese"),
-    MANDARIN("Mandarin"),
-    FRENCH("French");
-
-
-    private final String writing;
-
-    public static Language fromString(String category)
+    public Language(Integer id,
+                    String name,
+                    List<Film> films)
     {
-        return Language.valueOf(category.toUpperCase());
+        this.id = id;
+        this.name = name;
+        films.forEach(this::addFilm);
     }
 
-    Language(String writing)
-    {
-        this.writing = writing;
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-    public String getWriting() { return writing; }
+    @Column(nullable = false, unique = true)
+    private String name;
+
+    @OneToMany(mappedBy = "language")
+    List<Film> films = new ArrayList<>();
+    
+    // используем этот метод, а не getFilms() чтобы проставлять зависимость и у Film автоматически, а не в клиенте.
+    public void addFilm(Film film)
+    {
+        films.add(film);
+        film.setLanguage(this);
+    }
 }

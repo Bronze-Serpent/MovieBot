@@ -33,7 +33,7 @@ public class TxtMsgHandler implements MsgHandler
     private void handleMovieTitle(String chatId, String title, Consumer<BotApiMethodMessage> resultKeeper)
     {
         Thread handler = new Thread(() ->
-                filmService.findMovie(title).stream()
+                filmService.findByTitle(title).stream()
                         .map(FilmService::describeFilm)
                         .map((description) -> new SendMessage(chatId, description))
                         .forEach(resultKeeper));

@@ -1,4 +1,4 @@
-package com.barabanov.moviebot.service;
+package com.barabanov.moviebot.service.msg.sevice;
 
 
 import com.barabanov.moviebot.bot.TgManageMsgBot;
@@ -29,7 +29,8 @@ public class MsgSender implements Runnable
             catch (TelegramApiException e)
             {
                 System.out.println("An TelegramApiException" + e);
-            } catch (InterruptedException e) {
+            } catch (InterruptedException e)
+            {
                 throw new RuntimeException(e);
             }
         }

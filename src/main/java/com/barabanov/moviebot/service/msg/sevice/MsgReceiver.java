@@ -1,4 +1,4 @@
-package com.barabanov.moviebot.service;
+package com.barabanov.moviebot.service.msg.sevice;
 
 
 import com.barabanov.moviebot.handler.*;
@@ -50,14 +50,19 @@ public class MsgReceiver implements Runnable
                         String text = msg.getText().trim();
                         if (Command.isItCmd(text))
                             cmdHandler.handleCommand(Command.fromString(text), msg, resultKeeper);
-                        if (Button.isItButtonMsg(text))
-                            btnHandler.handleButton(Button.fromString(text), msg, resultKeeper);
-                        msgHandler.handleMessage(msg, resultKeeper);
+                        else
+                        {
+                            if (MenuButton.isItButtonMsg(text))
+                                btnHandler.handleButton(MenuButton.fromString(text), msg, resultKeeper);
+                            else
+                                msgHandler.handleMessage(msg, resultKeeper);
+                        }
                     }
                 }
                 else if (update.hasCallbackQuery())
                     callBackHandler.handleCallBack(update.getCallbackQuery(), resultKeeper);
-            } catch (InterruptedException e) {
+            } catch (InterruptedException e)
+            {
                 throw new RuntimeException(e);
             }
 

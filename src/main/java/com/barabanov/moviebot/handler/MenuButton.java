@@ -2,7 +2,8 @@ package com.barabanov.moviebot.handler;
 
 import java.util.Arrays;
 
-public enum Button
+
+public enum MenuButton
 {
     CATEGORIES("Categories"),
     TOP_MOVIES("Top movies"),
@@ -13,21 +14,21 @@ public enum Button
     private final String msgSyntax;
 
 
-    Button(String callBackSyntax)
+    MenuButton(String callBackSyntax)
     {
         this.msgSyntax = callBackSyntax;
     }
 
 
-    public static Button fromString(String callBackAsTxt)
+    public static MenuButton fromString(String callBackAsTxt)
     {
-        return Button.valueOf(String.join("_", callBackAsTxt.split(" ")).toUpperCase());
+        return MenuButton.valueOf(String.join("_", callBackAsTxt.split(" ")).toUpperCase());
     }
 
 
     public static boolean isItButtonMsg(String callBackAsTxt)
     {
-        for (String callBack : Arrays.stream(Button.values()).map(Button::getMsgSyntax).toList())
+        for (String callBack : Arrays.stream(MenuButton.values()).map(MenuButton::getMsgSyntax).toList())
             if (callBackAsTxt.equals(callBack))
                 return true;
 

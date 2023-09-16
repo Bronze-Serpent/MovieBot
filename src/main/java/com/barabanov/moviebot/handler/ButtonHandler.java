@@ -9,5 +9,5 @@ import java.util.function.Consumer;
 
 public interface ButtonHandler
 {
-    void handleButton(Button btn, Message msg, Consumer<BotApiMethodMessage> resultKeeper);
+    void handleButton(MenuButton btn, Message msg, Consumer<BotApiMethodMessage> resultKeeper);
 }
