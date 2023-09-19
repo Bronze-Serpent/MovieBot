@@ -1,8 +1,13 @@
 package com.barabanov.moviebot.bot;
 
 
-import com.barabanov.moviebot.handler.*;
 import com.barabanov.moviebot.interseptor.TransactionInterceptor;
+import com.barabanov.moviebot.listener.callback.CategoriesCallbackListener;
+import com.barabanov.moviebot.listener.callback.TittleCallbackListener;
+import com.barabanov.moviebot.listener.msg.CmdMsgListener;
+import com.barabanov.moviebot.listener.msg.Command;
+import com.barabanov.moviebot.listener.msg.HomeBtnMsgListener;
+import com.barabanov.moviebot.listener.msg.TittleMsgListener;
 import com.barabanov.moviebot.mapper.FilmCreateMapper;
 import com.barabanov.moviebot.mapper.FilmReadMapper;
 import com.barabanov.moviebot.mapper.LanguageReadMapper;
@@ -71,7 +76,7 @@ public class BotStarter
             // Прокси объект над FilmService, чтобы динамически открывать / закрывать транзакции в его методах, помеченных @Transactional.
             // А не прописывать эту логику в каждом методе вручную.
             var transactionInterceptor = new TransactionInterceptor(sessionFactory);
-            FilmService proxyUserService = new ByteBuddy()
+            FilmService proxyFilmService = new ByteBuddy()
                     .subclass(FilmService.class)
                     .method(ElementMatchers.any())
                     .intercept(MethodDelegation.to(transactionInterceptor))
@@ -81,12 +86,13 @@ public class BotStarter
                     .getDeclaredConstructor(Validator.class, FilmReadMapper.class, FilmCreateMapper.class, FilmRepository.class)
                     .newInstance(validator, filmReadMapper, filmCreateMapper, filmRepository);
 
-            var simpleCmdHandler = new SimpleCmdHandler();
-            var homeBtnHandler = new HomeBtnHandler(proxyUserService);
-            var txtMsgHandler = new TxtMsgHandler(proxyUserService);
-            var simpleCallBackHandler = new SimpleCallBackHandler(proxyUserService);
 
-            MsgReceiver msgReceiver = new MsgReceiver(bot, simpleCmdHandler, homeBtnHandler, txtMsgHandler, simpleCallBackHandler);
+            MsgReceiver msgReceiver = new MsgReceiver(bot);
+            msgReceiver.addMsgListener(new CmdMsgListener());
+            msgReceiver.addMsgListener(new HomeBtnMsgListener(proxyFilmService));
+            msgReceiver.addMsgListener(new TittleMsgListener(proxyFilmService));
+            msgReceiver.addCallbackListener(new CategoriesCallbackListener(proxyFilmService));
+            msgReceiver.addCallbackListener(new TittleCallbackListener(proxyFilmService));
 
             // Daemon потоки можно будет заменить обычными с interrupt(),
             // но для этого нужно будет сделать консольное приложение из проекта. Чтобы где-то вводить stop,
@@ -115,7 +121,7 @@ public class BotStarter
 
     public static TgManageMsgBot createBot() throws TelegramApiException
     {
-        TgManageMsgBot bot = new MovieBotTG();
+        TgManageMsgBot bot = new TgMovieBot();
 
         SetMyCommands commandsSet = SetMyCommands
                 .builder()

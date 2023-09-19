@@ -8,7 +8,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 
-public class MovieBotTG extends TgManageMsgBot
+public class TgMovieBot extends TgManageMsgBot
 {
 
     private static final String BOT_TOKEN = "bot.token";
@@ -39,17 +39,16 @@ public class MovieBotTG extends TgManageMsgBot
     }
 
 
-    public BotApiMethodMessage getSendMsg() throws InterruptedException
-    {
-        return SEND_QUEUE.take();
-    }
+    @Override
+    public BotApiMethodMessage getSendMsg() throws InterruptedException { return SEND_QUEUE.take(); }
 
+    @Override
     public void putSendMsg(BotApiMethodMessage msg)
     {
         SEND_QUEUE.add(msg);
     }
 
-    public Update getReceivedUpdate() throws InterruptedException {
-        return RECEIVED_QUEUE.take();
-    }
+    @Override
+    public Update getReceivedUpdate() throws InterruptedException { return RECEIVED_QUEUE.take(); }
+
 }

@@ -18,7 +18,9 @@ public abstract class BaseRepository<K extends Serializable, E extends BaseEntit
     @Getter
     private final EntityManager entityManager;
 
-    private final Class<E> clazz; // можно попробовать убрать это поле, используя рефлексию для получения E.class, но так проще
+    // можно попробовать убрать это поле, используя рефлексию для получения E.class,
+    // но так проще, а работа с Class не выходит выше Repository
+    private final Class<E> clazz;
 
 
     @Override
