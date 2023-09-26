@@ -1,4 +1,4 @@
-package com.barabanov.moviebot.listener.msg;
+package com.barabanov.moviebot.mapper.listener.msg;
 
 import java.util.Arrays;
 

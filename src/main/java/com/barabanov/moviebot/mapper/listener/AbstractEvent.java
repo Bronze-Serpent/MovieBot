@@ -1,4 +1,4 @@
-package com.barabanov.moviebot.listener;
+package com.barabanov.moviebot.mapper.listener;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

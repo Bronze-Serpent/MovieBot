@@ -11,8 +11,8 @@
         </layout>
     </appender>
 
-    <appender name="file" class="org.apache.log4j.RollingFileAppender">
-        <param name="file" value="logs/hibernate-bot.log"/>
+    <appender name="hibernateFile" class="org.apache.log4j.RollingFileAppender">
+        <param name="file" value="logs/hibernate.log"/>
 
         <param name="append" value="true"/>
         <param name="maxFileSize" value="20MB"/>
@@ -23,10 +23,27 @@
         </layout>
     </appender>
 
+    <appender name="applicationFile" class="org.apache.log4j.RollingFileAppender">
+        <param name="file" value="logs/application.log"/>
+
+        <param name="append" value="true"/>
+        <param name="maxFileSize" value="20MB"/>
+        <param name="maxBackupIndex" value="10"/> <!--после создания файлов в количестве maxBackupIndex по maxFileSize мб каждый, начнётся rolling (перезапись существующих файлов) -->
+
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="conversionPattern" value="[%d{yyyy-MM-dd HH:mm:ss,SSS}] %p [%c: %L] %m%n"/>
+        </layout>
+    </appender>
+
+    <logger name="org.hibernate" additivity="false">
+        <level value="info"/>
+        <appender-ref ref="hibernateFile"/>
+    </logger>
+
     <root>
         <level value="info"/>
-        <appender-ref ref="console"/>
-        <appender-ref ref="file"/>
+<!--        <appender-ref ref="console"/>-->
+        <appender-ref ref="applicationFile"/>
     </root>
 
 </log4j:configuration>

@@ -1,13 +1,12 @@
-package com.barabanov.moviebot.listener.callback;
+package com.barabanov.moviebot.mapper.listener.callback;
 
 import com.barabanov.moviebot.dto.FilmReadDto;
 import com.barabanov.moviebot.entity.Category;
-import com.barabanov.moviebot.listener.msg.HomeBtnMsgListener;
+import com.barabanov.moviebot.mapper.listener.ResponseGenerationUtil;
 import com.barabanov.moviebot.service.FilmService;
+import com.barabanov.moviebot.util.MsgPropUtil;
 import lombok.RequiredArgsConstructor;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-
-import static com.barabanov.moviebot.listener.ResponseGenerationUtil.createInlineBtnSendMsg;
 
 
 @RequiredArgsConstructor
@@ -15,6 +14,7 @@ public class CategoriesCallbackListener implements CallbackReceiveEventListener
 {
 
     private static final int FILMS_QUANTITY = 15;
+    private static final String CATEGORIES = "btn.categories";
 
     private final FilmService filmService;
 
@@ -22,7 +22,7 @@ public class CategoriesCallbackListener implements CallbackReceiveEventListener
     public void onCallbackReceive(CallbackReceiveEvent event)
     {
         String withBtnText = event.getCallbackQuery().getMessage().getText();
-        if (withBtnText.equals(HomeBtnMsgListener.CATEGORIES_MSG))
+        if (withBtnText.equals(MsgPropUtil.get(CATEGORIES)))
         {
             String btnTxt= event.getCallbackQuery().getData();
             event.getSendMsgKeeper().accept(handleCategoriesCallBack(
@@ -36,7 +36,7 @@ public class CategoriesCallbackListener implements CallbackReceiveEventListener
 
     private SendMessage handleCategoriesCallBack(String chatId, Category category)
     {
-        var sendMsg = createInlineBtnSendMsg(filmService.moviesWithCategory(category).stream()
+        var sendMsg = ResponseGenerationUtil.createInlineBtnSendMsg(filmService.moviesWithCategory(category).stream()
                 .limit(FILMS_QUANTITY)
                 .map(FilmReadDto::title),
                 "Movies in the category " + category.getWriting() + ":");

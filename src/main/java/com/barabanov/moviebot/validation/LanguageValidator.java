@@ -6,10 +6,12 @@ import javax.validation.ConstraintValidatorContext;
 
 public class LanguageValidator implements ConstraintValidator<ValidateLanguage, String>
 {
+
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context)
     {
-        // тут из БД доставать все Language.name и сверять бы, чтобы такой точно был
+        // TODO: 26.09.2023 чтобы тут сделать валидвацию на проверку наличия языка с таким именем в БД нужен languageService,
+        //  но объект LanguageValidator создаётся автоматически. Короче нужен ContextProvider, а тут его нет :)
         return true;
     }
 }

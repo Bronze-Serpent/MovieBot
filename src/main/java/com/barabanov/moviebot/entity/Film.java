@@ -8,32 +8,13 @@ import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString(exclude = "language")
 @EqualsAndHashCode(exclude = "language")
 @Builder
 @Entity
 public class Film implements BaseEntity<Long>
 {
-    public Film(Long id,
-                String title,
-                String description,
-                LocalDate releaseYear,
-                Language language,
-                Integer length,
-                Rating rating,
-                Category category,
-                Integer audienceScore)
-    {
-        this.title = title;
-        this.description = description;
-        this.releaseYear = releaseYear;
-        this.language = language;
-        language.getFilms().add(this);
-        this.length = length;
-        this.rating = rating;
-        this.category = category;
-        this.audienceScore = audienceScore;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

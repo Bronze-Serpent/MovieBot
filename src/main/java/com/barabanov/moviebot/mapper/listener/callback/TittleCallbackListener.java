@@ -1,7 +1,7 @@
-package com.barabanov.moviebot.listener.callback;
+package com.barabanov.moviebot.mapper.listener.callback;
 
-import com.barabanov.moviebot.listener.msg.HomeBtnMsgListener;
 import com.barabanov.moviebot.service.FilmService;
+import com.barabanov.moviebot.util.MsgPropUtil;
 import lombok.RequiredArgsConstructor;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
@@ -9,6 +9,11 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 @RequiredArgsConstructor
 public class TittleCallbackListener implements CallbackReceiveEventListener
 {
+    // TODO: 26.09.2023
+    //  если они используются в разных местах, возможно, имеет смысл сделать отдельный класс с константами,
+    //  чтобы в разных классах не менять один и тот же путь к сообщению
+    private static final String TOP_MOVIES = "btn.top_movies";
+    private static final String NEW_FILMS = "btn.new_films";
 
     private final FilmService filmService;
 
@@ -17,8 +22,8 @@ public class TittleCallbackListener implements CallbackReceiveEventListener
     public void onCallbackReceive(CallbackReceiveEvent event)
     {
         String withBtnText = event.getCallbackQuery().getMessage().getText();
-        if (withBtnText.equals(HomeBtnMsgListener.TOP_MOVIES_MSG) ||
-                withBtnText.equals(HomeBtnMsgListener.NEW_FILMS_MSG))
+        if (withBtnText.equals(MsgPropUtil.get(TOP_MOVIES)) ||
+                withBtnText.equals(MsgPropUtil.get(NEW_FILMS)))
         {
             String btnTxt = event.getCallbackQuery().getData();
 

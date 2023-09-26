@@ -51,4 +51,10 @@ public class TgMovieBot extends TgManageMsgBot
     @Override
     public Update getReceivedUpdate() throws InterruptedException { return RECEIVED_QUEUE.take(); }
 
+    @Override
+    public boolean hasSendMsg() { return !SEND_QUEUE.isEmpty(); }
+
+    @Override
+    public boolean hasReceivedMsg() { return !RECEIVED_QUEUE.isEmpty(); }
+
 }

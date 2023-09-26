@@ -1,4 +1,9 @@
 package com.barabanov.moviebot.dto;
 
 
-public record LanguageCreateDto(String name) { }
+import com.barabanov.moviebot.validation.ValidateLanguage;
+
+public record LanguageCreateDto(
+                                @ValidateLanguage
+                                String name
+) { }

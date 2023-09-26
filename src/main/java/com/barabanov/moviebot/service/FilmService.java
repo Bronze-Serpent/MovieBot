@@ -85,7 +85,6 @@ public class FilmService
     @Transactional
     public Long create(FilmCreateDto filmCreateDto)
     {
-        // Проблема при валидации Language в LanguageValidator
         var validationResult = validator.validate(filmCreateDto);
         if (!validationResult.isEmpty())
             throw new ConstraintViolationException(validationResult);

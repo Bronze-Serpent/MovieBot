@@ -1,4 +1,4 @@
-package com.barabanov.moviebot.listener.msg;
+package com.barabanov.moviebot.mapper.listener.msg;
 
 import java.util.Arrays;
 
@@ -28,7 +28,9 @@ public enum MenuButton
 
     public static boolean isItButtonMsg(String callBackAsTxt)
     {
-        for (String callBack : Arrays.stream(MenuButton.values()).map(MenuButton::getMsgSyntax).toList())
+        for (String callBack : Arrays.stream(MenuButton.values())
+                .map(MenuButton::getMsgSyntax)
+                .toList())
             if (callBackAsTxt.equals(callBack))
                 return true;
 

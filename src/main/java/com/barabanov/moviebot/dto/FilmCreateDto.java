@@ -1,5 +1,6 @@
 package com.barabanov.moviebot.dto;
 
+import com.barabanov.moviebot.validation.ValidateCategory;
 import com.barabanov.moviebot.validation.ValidateLanguage;
 import com.barabanov.moviebot.validation.ValidateRating;
 
@@ -21,7 +22,7 @@ public record FilmCreateDto(
                             @ValidateRating
                             String rating,
 
-                            @ValidateRating
+                            @ValidateCategory
                             String category,
 
                             @Min(value = 0)

@@ -1,7 +1,7 @@
-package com.barabanov.moviebot.listener.msg;
+package com.barabanov.moviebot.mapper.listener.msg;
 
 
-import com.barabanov.moviebot.listener.callback.MsgReceiveEvent;
+import com.barabanov.moviebot.mapper.listener.callback.MsgReceiveEvent;
 import com.barabanov.moviebot.util.MsgPropUtil;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -13,8 +13,8 @@ import java.util.List;
 public class CmdMsgListener implements MsgReceiveEventListener
 {
 
-    private final static String START = "msg.start";
-    private final static String HELP = "msg.help";
+    private final static String START = "cmd.start";
+    private final static String HELP = "cmd.help";
 
 
     @Override

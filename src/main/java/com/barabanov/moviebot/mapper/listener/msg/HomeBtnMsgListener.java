@@ -1,24 +1,24 @@
-package com.barabanov.moviebot.listener.msg;
+package com.barabanov.moviebot.mapper.listener.msg;
 
 import com.barabanov.moviebot.dto.FilmReadDto;
 import com.barabanov.moviebot.entity.Category;
-import com.barabanov.moviebot.listener.callback.MsgReceiveEvent;
+import com.barabanov.moviebot.mapper.listener.callback.MsgReceiveEvent;
+import com.barabanov.moviebot.mapper.listener.ResponseGenerationUtil;
 import com.barabanov.moviebot.service.FilmService;
+import com.barabanov.moviebot.util.MsgPropUtil;
 import lombok.RequiredArgsConstructor;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.time.LocalDate;
 import java.util.Arrays;
 
-import static com.barabanov.moviebot.listener.ResponseGenerationUtil.createInlineBtnSendMsg;
-
 
 @RequiredArgsConstructor
 public class HomeBtnMsgListener implements MsgReceiveEventListener
 {
-    public static final String CATEGORIES_MSG = "Categories:";
-    public static final String TOP_MOVIES_MSG = "Top Movies:";
-    public static final String NEW_FILMS_MSG = "Some last movies:";
+    private static final String CATEGORIES = "btn.categories";
+    private static final String TOP_MOVIES = "btn.top_movies";
+    private static final String NEW_FILMS = "btn.new_films";
 
     private static final int NEW_FILMS_QUANTITY = 15;
     private static final int BEST_FILMS_QUANTITY = 10;
@@ -47,27 +47,27 @@ public class HomeBtnMsgListener implements MsgReceiveEventListener
         SendMessage sendMessage = null;
         switch (btn) {
             case CATEGORIES ->
-                sendMessage = createInlineBtnSendMsg(
+                sendMessage = ResponseGenerationUtil.createInlineBtnSendMsg(
                         Arrays.stream(Category.values())
                                 .map(Category::getWriting),
-                        CATEGORIES_MSG
+                        MsgPropUtil.get(CATEGORIES)
                 );
             case RANDOM_MOVIE -> {
                 sendMessage = new SendMessage();
                 sendMessage.setText(FilmService.describeFilm(filmService.getRandomMovie()));
             }
             case NEW_FILMS ->
-                sendMessage = createInlineBtnSendMsg(
+                sendMessage = ResponseGenerationUtil.createInlineBtnSendMsg(
                         filmService.moviesWithYear(LocalDate.now()).stream()
                                 .limit(NEW_FILMS_QUANTITY)
                                 .map(FilmReadDto::title),
-                        NEW_FILMS_MSG
+                        MsgPropUtil.get(NEW_FILMS)
                 );
             case TOP_MOVIES ->
-                sendMessage = createInlineBtnSendMsg(
+                sendMessage = ResponseGenerationUtil.createInlineBtnSendMsg(
                         filmService.getBestFilms(BEST_FILMS_QUANTITY).stream()
                                 .map(FilmReadDto::title),
-                        TOP_MOVIES_MSG
+                        MsgPropUtil.get(TOP_MOVIES)
                 );
         }
         sendMessage.setChatId(chatId);

@@ -4,6 +4,7 @@ package com.barabanov.moviebot.mapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 // по-хорошему это всё можно сделать через MapStruct, но пока так
 public interface Mapper<F, T>
 {
