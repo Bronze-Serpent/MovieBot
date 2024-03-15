@@ -1,7 +1,7 @@
-package com.barabanov.moviebot.mapper.listener.msg;
+package com.barabanov.moviebot.listener.msg;
 
 
-import com.barabanov.moviebot.mapper.listener.callback.MsgReceiveEvent;
+import com.barabanov.moviebot.listener.callback.MsgReceiveEvent;
 import com.barabanov.moviebot.util.MsgPropUtil;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;

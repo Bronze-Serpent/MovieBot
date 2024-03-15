@@ -1,7 +1,7 @@
-package com.barabanov.moviebot.mapper.listener.msg;
+package com.barabanov.moviebot.listener.msg;
 
 
-import com.barabanov.moviebot.mapper.listener.callback.MsgReceiveEvent;
+import com.barabanov.moviebot.listener.callback.MsgReceiveEvent;
 import com.barabanov.moviebot.service.FilmService;
 import lombok.RequiredArgsConstructor;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;

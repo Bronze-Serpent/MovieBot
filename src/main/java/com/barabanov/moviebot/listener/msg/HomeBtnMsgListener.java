@@ -1,9 +1,9 @@
-package com.barabanov.moviebot.mapper.listener.msg;
+package com.barabanov.moviebot.listener.msg;
 
 import com.barabanov.moviebot.dto.FilmReadDto;
 import com.barabanov.moviebot.entity.Category;
-import com.barabanov.moviebot.mapper.listener.callback.MsgReceiveEvent;
-import com.barabanov.moviebot.mapper.listener.ResponseGenerationUtil;
+import com.barabanov.moviebot.listener.callback.MsgReceiveEvent;
+import com.barabanov.moviebot.listener.ResponseGenerationUtil;
 import com.barabanov.moviebot.service.FilmService;
 import com.barabanov.moviebot.util.MsgPropUtil;
 import lombok.RequiredArgsConstructor;

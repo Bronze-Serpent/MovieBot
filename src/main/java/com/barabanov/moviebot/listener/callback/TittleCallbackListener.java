@@ -1,4 +1,4 @@
-package com.barabanov.moviebot.mapper.listener.callback;
+package com.barabanov.moviebot.listener.callback;
 
 import com.barabanov.moviebot.service.FilmService;
 import com.barabanov.moviebot.util.MsgPropUtil;

@@ -1,4 +1,4 @@
-package com.barabanov.moviebot.mapper.listener.callback;
+package com.barabanov.moviebot.listener.callback;
 
 
 public interface CallbackReceiveEventListener

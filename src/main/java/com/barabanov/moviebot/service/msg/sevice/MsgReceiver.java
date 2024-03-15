@@ -2,10 +2,10 @@ package com.barabanov.moviebot.service.msg.sevice;
 
 
 import com.barabanov.moviebot.bot.TgManageMsgBot;
-import com.barabanov.moviebot.mapper.listener.callback.CallbackReceiveEvent;
-import com.barabanov.moviebot.mapper.listener.callback.CallbackReceiveEventListener;
-import com.barabanov.moviebot.mapper.listener.callback.MsgReceiveEvent;
-import com.barabanov.moviebot.mapper.listener.msg.MsgReceiveEventListener;
+import com.barabanov.moviebot.listener.callback.CallbackReceiveEvent;
+import com.barabanov.moviebot.listener.callback.CallbackReceiveEventListener;
+import com.barabanov.moviebot.listener.callback.MsgReceiveEvent;
+import com.barabanov.moviebot.listener.msg.MsgReceiveEventListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;

@@ -1,6 +1,6 @@
-package com.barabanov.moviebot.mapper.listener.callback;
+package com.barabanov.moviebot.listener.callback;
 
-import com.barabanov.moviebot.mapper.listener.AbstractEvent;
+import com.barabanov.moviebot.listener.AbstractEvent;
 import lombok.Getter;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;

@@ -1,4 +1,4 @@
-package com.barabanov.moviebot.mapper.listener;
+package com.barabanov.moviebot.listener;
 
 import lombok.experimental.UtilityClass;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
